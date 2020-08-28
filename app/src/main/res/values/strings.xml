@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Hodgepodge</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <!--  CrimePageActivity  -->
+    <string name="crime_title_hint">"输入恶劣行为的标题"</string>
+    <string name="crime_title_label">"标题"</string>
+    <string name="crime_details_label">"详情"</string>
+    <string name="crime_solved_label">"解决"</string>
+    <string name="crime_delete">"删除"</string>
+
+    <string name="new_crime">"新建"</string>
+    <string name="show_subtitle">"显示副标题"</string>
+    <string name="hide_subtitle">"隐藏副标题"</string>
+    <string name="subtitle_format">%1d 问题</string>
+
+</resources>

@@ -1,0 +1,3 @@
+include ':UtilsLibrary'
+include ':app'
+rootProject.name = "Hodgepodge"

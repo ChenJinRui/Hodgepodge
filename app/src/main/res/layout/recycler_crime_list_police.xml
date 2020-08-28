@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="4"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/recycler_crime_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Crime title"/>
+        <TextView
+            android:id="@+id/recycler_crime_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="Crime date"/>
+    </LinearLayout>
+    <CheckBox
+        android:id="@+id/recycler_crime_solved"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/crime_solved_label"
+        />
+
+</LinearLayout>
