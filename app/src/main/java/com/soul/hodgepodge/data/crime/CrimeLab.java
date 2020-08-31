@@ -87,6 +87,7 @@ class CrimeLab {
         values.put(CrimeTable.Cols.DATE,crimeBean.getDate().getTime());
         values.put(CrimeTable.Cols.UUID,crimeBean.getID().toString());
         values.put(CrimeTable.Cols.SOLVED,crimeBean.isSolved() ? 1 : 0);
+        values.put(CrimeTable.Cols.SUSPECT,crimeBean.getSuspect());
 
         return values;
     }

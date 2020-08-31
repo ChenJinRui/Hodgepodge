@@ -14,6 +14,19 @@ class CrimeBean {
     private Date mDate;
     private UUID mID;
     private boolean mSolved;
+    private String mSuspect;
+
+    public String getSuspect() {
+        return mSuspect;
+    }
+
+    public void setSuspect(String suspect) {
+        mSuspect = suspect;
+    }
+
+    public void setID(UUID ID) {
+        mID = ID;
+    }
 
     public CrimeBean() {
         this(UUID.randomUUID());
@@ -65,6 +78,7 @@ class CrimeBean {
                 ", date=" + mDate +
                 ", mID=" + mID +
                 ", mSolved=" + mSolved +
+                ", mSuspect=" + mSuspect +
                 '}';
     }
 }
