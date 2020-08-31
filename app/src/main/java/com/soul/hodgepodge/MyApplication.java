@@ -30,6 +30,7 @@ public class MyApplication extends Application {
         //Devices 界面下打开inspect 找到resources,点开 ,然后找到Websql就可以查看数据库和表
         Stetho.initializeWithDefaults(this);
         //真机调试查看数据库 e
+        //this is test
     }
 
     /**
