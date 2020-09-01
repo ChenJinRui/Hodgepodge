@@ -2,7 +2,11 @@ package com.soul.hodgepodge.fragment.crime;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -38,11 +42,15 @@ class CrimeFragment extends Fragment {
     private EditText mTitleField;
     private Button mDateBtn;
     private Button mDeleteBtn;
+    private Button mSuspectBtn;
+    private Button mReportBtn;
     private CheckBox mSolvedCb;
 
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0;
+    private static final int REQUEST_CONTACT = 1;
+
     /**
      *
      * @param crimeID id 可以根据需要修改为其他参数 可以是Object 可以是基本类型
@@ -93,6 +101,8 @@ class CrimeFragment extends Fragment {
         mDateBtn = v.findViewById(R.id.crime_btn_date);
         mDeleteBtn = v.findViewById(R.id.crime_btn_delete);
         mTitleField = v.findViewById(R.id.crime_et_title);
+        mReportBtn = v.findViewById(R.id.crime_report);
+        mSuspectBtn = v.findViewById(R.id.crime_suspect);
 
         mTitleField.setText(mCrime.getTitle());
         mSolvedCb.setChecked(mCrime.isSolved());
@@ -145,7 +155,36 @@ class CrimeFragment extends Fragment {
                 mCrime.setTitle(editable.toString());
             }
         });
-
+        mReportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_TEXT,getCrimeReport());
+                i.putExtra(Intent.EXTRA_SUBJECT,getString(R.string.crime_report_subject));
+                //Intent.createChoose 可以选择每次弹出所有符合展示条件的应用
+                i = Intent.createChooser(i,getString(R.string.send_report));
+                startActivity(i);
+            }
+        });
+        final Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+//        pickContact.addCategory(Intent.CATEGORY_HOME);//测试pickContact 没有匹配的情况
+        mSuspectBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            startActivityForResult(pickContact,REQUEST_CONTACT);
+            }
+        });
+        if(mCrime.getSuspect() != null){
+            mSuspectBtn.setText(mCrime.getSuspect());
+        }
+        /**
+         * 防止隐式Intent pickContact 在系统找不到匹配Activity崩溃,提前屏蔽掉调用操作
+         */
+        PackageManager packageManager = getActivity().getPackageManager();
+        if(packageManager.resolveActivity(pickContact,PackageManager.MATCH_DEFAULT_ONLY) == null){
+            mSuspectBtn.setEnabled(false);
+        }
         return v;
     }
 
@@ -172,6 +211,22 @@ class CrimeFragment extends Fragment {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
             updateDate();
+        }else if(requestCode == REQUEST_CONTACT){
+            Uri contactUri = data.getData();
+            String [] queryFields = new String []{ContactsContract.Contacts.DISPLAY_NAME};
+            Cursor c = getActivity().getContentResolver()
+                    .query(contactUri,queryFields,null,null,null);
+            try{
+                if(c.getColumnCount() == 0){
+                    return;
+                }
+                c.moveToFirst();
+                String suspect = c.getString(0);
+                mCrime.setSuspect(suspect);
+                mSuspectBtn.setText(suspect);
+            } finally {
+                c.close();
+            }
         }
     }
 
