@@ -12,6 +12,7 @@ import com.soul.hodgepodge.db.crime.CrimeCursorWrapper;
 import com.soul.hodgepodge.db.crime.CrimeDBSchema;
 import com.soul.hodgepodge.db.crime.CrimeDBSchema.CrimeTable;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -43,6 +44,17 @@ class CrimeLab {
         ContentValues values = getContentValues(c);
         mDatabase.insert(CrimeTable.NAME,null,values);
 
+    }
+    //
+
+    /**
+     * 该方法不会创建任何文件，只是指向，某个具体位置的File对象
+     * @param crimeBean getPhotoFilename
+     * @return File对象
+     */
+    public File getPhotoFile(CrimeBean crimeBean){
+        File file = mContext.getFilesDir();
+        return new File(file,crimeBean.getPhotoFilename());
     }
     public void updateCrime(CrimeBean c){
         String uuidString = c.getID().toString();

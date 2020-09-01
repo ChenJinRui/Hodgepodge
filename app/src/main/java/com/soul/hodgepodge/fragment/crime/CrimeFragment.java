@@ -3,10 +3,12 @@ package com.soul.hodgepodge.fragment.crime;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -17,6 +19,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.soul.hodgepodge.R;
 import com.soul.hodgepodge.bean.crime.CrimeBean;
@@ -25,11 +29,14 @@ import com.soul.hodgepodge.dialog.DatePickerFragment;
 import com.soul.hodgepodge.ui.crime.DatePickerFragmentActivity;
 import com.soul.hodgepodge.utils.LogUtils;
 
+import java.io.File;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 public
@@ -38,7 +45,10 @@ public
  */
 // TODO: 2020/8/14 192
 class CrimeFragment extends Fragment {
+
     private CrimeBean mCrime;
+    private File mPhotoFile;
+
     private EditText mTitleField;
     private Button mDateBtn;
     private Button mDeleteBtn;
@@ -46,10 +56,14 @@ class CrimeFragment extends Fragment {
     private Button mReportBtn;
     private CheckBox mSolvedCb;
 
+    private ImageButton mPhotoBtn;
+    private ImageView mPhoneView;
+
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_CONTACT = 1;
+    private static final int REQUEST_PHOTO = 2;
 
     /**
      *
@@ -90,6 +104,8 @@ class CrimeFragment extends Fragment {
             LogUtils.e("MSG IS NULL");
             mCrime = new CrimeBean();
         }
+
+        mPhotoFile = CrimeLab.getInstance(getActivity()).getPhotoFile(mCrime);
     }
 
     @Nullable
@@ -103,6 +119,9 @@ class CrimeFragment extends Fragment {
         mTitleField = v.findViewById(R.id.crime_et_title);
         mReportBtn = v.findViewById(R.id.crime_report);
         mSuspectBtn = v.findViewById(R.id.crime_suspect);
+
+        mPhotoBtn = v.findViewById(R.id.crime_camera);
+        mPhoneView = v.findViewById(R.id.crime_photo);
 
         mTitleField.setText(mCrime.getTitle());
         mSolvedCb.setChecked(mCrime.isSolved());
@@ -185,6 +204,26 @@ class CrimeFragment extends Fragment {
         if(packageManager.resolveActivity(pickContact,PackageManager.MATCH_DEFAULT_ONLY) == null){
             mSuspectBtn.setEnabled(false);
         }
+        final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        boolean canTakePhoto = mPhotoFile != null &&
+                captureImage.resolveActivity(packageManager) != null;
+        mPhotoBtn.setEnabled(canTakePhoto);
+        mPhotoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //com.soul.hodgepodge.FileProvider 实在AndroidManifest.xml配置的地址
+                Uri uri = FileProvider.getUriForFile(getActivity(),
+                        "com.soul.hodgepodge.FileProvider",mPhotoFile);
+
+                List<ResolveInfo> cameraActivites = getActivity().getPackageManager()
+                        .queryIntentActivities(captureImage,PackageManager.MATCH_DEFAULT_ONLY);
+                for (ResolveInfo activity : cameraActivites) {
+                    getActivity().grantUriPermission(activity.activityInfo.packageName,
+                            uri,Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    startActivityForResult(captureImage,REQUEST_PHOTO);
+                }
+            }
+        });
         return v;
     }
 

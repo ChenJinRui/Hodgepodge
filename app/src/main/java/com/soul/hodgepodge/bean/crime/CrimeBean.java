@@ -71,6 +71,10 @@ class CrimeBean {
         return mID;
     }
 
+    public String getPhotoFilename(){
+        return "IMG_" + getID().toString() + ".jpg";
+    }
+
     @Override
     public String toString() {
         return "CrimeBean{" +
