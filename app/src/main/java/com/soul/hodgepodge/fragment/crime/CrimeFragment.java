@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -12,6 +13,7 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ import com.soul.hodgepodge.data.crime.CrimeLab;
 import com.soul.hodgepodge.dialog.DatePickerFragment;
 import com.soul.hodgepodge.ui.crime.DatePickerFragmentActivity;
 import com.soul.hodgepodge.utils.LogUtils;
+import com.soul.hodgepodge.utils.PictureUtils;
 
 import java.io.File;
 import java.util.Date;
@@ -57,7 +60,7 @@ class CrimeFragment extends Fragment {
     private CheckBox mSolvedCb;
 
     private ImageButton mPhotoBtn;
-    private ImageView mPhoneView;
+    private ImageView mPhotoView;
 
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
@@ -121,7 +124,7 @@ class CrimeFragment extends Fragment {
         mSuspectBtn = v.findViewById(R.id.crime_suspect);
 
         mPhotoBtn = v.findViewById(R.id.crime_camera);
-        mPhoneView = v.findViewById(R.id.crime_photo);
+        mPhotoView = v.findViewById(R.id.crime_photo);
 
         mTitleField.setText(mCrime.getTitle());
         mSolvedCb.setChecked(mCrime.isSolved());
@@ -205,7 +208,7 @@ class CrimeFragment extends Fragment {
             mSuspectBtn.setEnabled(false);
         }
         final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        boolean canTakePhoto = mPhotoFile != null &&
+        final boolean canTakePhoto = mPhotoFile != null &&
                 captureImage.resolveActivity(packageManager) != null;
         mPhotoBtn.setEnabled(canTakePhoto);
         mPhotoBtn.setOnClickListener(new View.OnClickListener() {
@@ -214,6 +217,7 @@ class CrimeFragment extends Fragment {
                 //com.soul.hodgepodge.FileProvider 实在AndroidManifest.xml配置的地址
                 Uri uri = FileProvider.getUriForFile(getActivity(),
                         "com.soul.hodgepodge.FileProvider",mPhotoFile);
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT,uri);
 
                 List<ResolveInfo> cameraActivites = getActivity().getPackageManager()
                         .queryIntentActivities(captureImage,PackageManager.MATCH_DEFAULT_ONLY);
@@ -224,6 +228,7 @@ class CrimeFragment extends Fragment {
                 }
             }
         });
+        updatePhoneView();
         return v;
     }
 
@@ -241,7 +246,7 @@ class CrimeFragment extends Fragment {
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        LogUtils.e("resultCode" + resultCode + " mCrime : " + (mCrime != null));
+        LogUtils.e("requestCode" + resultCode + " mCrime : " + (mCrime != null));
         if(resultCode != Activity.RESULT_OK){
             return;
         }
@@ -266,6 +271,12 @@ class CrimeFragment extends Fragment {
             } finally {
                 c.close();
             }
+        }else if(requestCode == REQUEST_PHOTO){
+            Uri uri = FileProvider.getUriForFile(getActivity(),
+                    "com.soul.hodgepodge.FileProvider",mPhotoFile);
+            getActivity().revokeUriPermission(uri,Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            LogUtils.e("updatePhoneView ： " + uri.getPath());
+            updatePhoneView();
         }
     }
 
@@ -291,6 +302,17 @@ class CrimeFragment extends Fragment {
         String report = getString(R.string.crime_report,mCrime.getTitle(),dateString,solvedString,suspect);
 
         return report;
+    }
+
+    private void updatePhoneView(){
+        if(mPhotoFile == null || !mPhotoFile.exists()){
+            LogUtils.e("updatePhoneView NUll ");
+            mPhotoView.setImageDrawable(null);
+        }else{
+            LogUtils.e("updatePhoneView : " + mPhotoFile.getPath());
+            Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(),getActivity());
+            mPhotoView.setImageBitmap(bitmap);
+        }
     }
 
     public void returnResult(){
