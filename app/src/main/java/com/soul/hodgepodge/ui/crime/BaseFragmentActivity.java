@@ -1,5 +1,6 @@
 package com.soul.hodgepodge.ui.crime;
 
+import androidx.annotation.LayoutRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -14,7 +15,8 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_root);
+//        setContentView(R.layout.activity_fragment_root);
+        setContentView(getLayoutResID());
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container_root);
@@ -24,5 +26,9 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
                     .add(R.id.fragment_container_root,fragment)
                     .commit();
         }
+    }
+    @LayoutRes
+    protected int getLayoutResID(){
+        return  R.layout.activity_fragment_root;
     }
 }
