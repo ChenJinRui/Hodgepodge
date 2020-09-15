@@ -40,6 +40,7 @@ public
  */
 class CrimeListFragment extends Fragment {
 
+    // TODO: 2020/9/15 mRecyclerView 实现ItemTouchHelper 侧滑删除 
     private RecyclerView mRecyclerView;
     private CrimeAdapter mCrimeAdapter;
 

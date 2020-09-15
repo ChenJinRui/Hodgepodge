@@ -47,7 +47,6 @@ public class AnimsActivity extends Activity {
     private AdapterView.OnItemClickListener mItemClick = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            // TODO: 2018/11/1
 //            Toast.makeText(AnimsActivity.this,""+position,Toast.LENGTH_SHORT).show();
 
 //            MyDialog myDialog = new MyDialog(AnimsActivity.this);

@@ -47,7 +47,6 @@ public
 /**
  * Created by Chjr on 2020/8/13
  */
-// TODO: 2020/8/14 192
 class CrimeFragment extends Fragment {
 
     private CrimeBean mCrime;
