@@ -1,5 +1,6 @@
 package com.soul.hodgepodge.fragment.crime;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,6 +50,8 @@ class CrimeListFragment extends Fragment {
 
     private boolean mSubtitleVisible;
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
+
+    private Callbacks mCallbacks;
 
     @Nullable
     @Override
@@ -106,8 +110,13 @@ class CrimeListFragment extends Fragment {
                 CrimeBean crimeBean = new CrimeBean();
                 Log.e("test",crimeBean.toString());
                 CrimeLab.getInstance(getActivity()).addCrime(crimeBean);
-                Intent intent = CrimePageActivity.newIntent(getActivity(),crimeBean.getID());
-                startActivity(intent);
+                if(mCallbacks != null){
+                    upDataUI();
+                    mCallbacks.onCrimeSelected(crimeBean);
+                }else{
+                    Intent intent = CrimePageActivity.newIntent(getActivity(),crimeBean.getID());
+                    startActivity(intent);
+                }
                 return true;
             case R.id.show_subtitle:
                 mSubtitleVisible = !mSubtitleVisible;
@@ -151,8 +160,33 @@ class CrimeListFragment extends Fragment {
         }
     }
 
+    /**
+     * @param context 获取依赖activity（实现了Callbacks接口）的实例转换为Callbacks
+     *                并在对应方法（onDetach）中销毁
+     */
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if(context instanceof Callbacks){//避免绑定Activity没有实现接口
+            mCallbacks = (Callbacks) context;
+        }
 
-    private void upDataUI() {
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
+
+    public interface Callbacks{
+        void onCrimeSelected(CrimeBean crimeBean);
+    }
+
+    /**
+     * 更新UI
+     */
+    public void upDataUI() {
         //单例的生命周期和APPLICATION相同 Context 避免持有影响回收
         CrimeLab crimeLab = CrimeLab.getInstance(Objects.requireNonNull(getActivity())
                 .getApplicationContext());
@@ -216,6 +250,7 @@ class CrimeListFragment extends Fragment {
 //            }
             return VIEW_TYPE_NORMAL;
         }
+
     }
 
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -243,8 +278,15 @@ class CrimeListFragment extends Fragment {
         @Override
         public void onClick(View view) {
 //          startActivity(new Intent(getActivity(), CrimePageActivity.class));
-            startActivityForResult(CrimePageActivity.newIntent(getActivity(), mCrimeBean.getID())
-                    , REQUEST_CODE_CRIME);
+//            startActivityForResult(CrimePageActivity.newIntent(getActivity(), mCrimeBean.getID())
+//                    , REQUEST_CODE_CRIME);
+            if(mCallbacks != null){
+                mCallbacks.onCrimeSelected(mCrimeBean);
+            }else{
+                startActivityForResult(CrimePageActivity.newIntent(getActivity(), mCrimeBean.getID())
+                        , REQUEST_CODE_CRIME);
+            }
+
         }
     }
 

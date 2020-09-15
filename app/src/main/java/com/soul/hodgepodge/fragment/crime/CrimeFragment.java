@@ -1,6 +1,7 @@
 package com.soul.hodgepodge.fragment.crime;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -68,6 +69,8 @@ class CrimeFragment extends Fragment {
     private static final int REQUEST_CONTACT = 1;
     private static final int REQUEST_PHOTO = 2;
 
+    private Callbacks mCallbacks;
+
     /**
      *
      * @param crimeID id 可以根据需要修改为其他参数 可以是Object 可以是基本类型
@@ -133,6 +136,7 @@ class CrimeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 mCrime.setSolved(b);
+                updateCrime();
             }
         });
 
@@ -175,6 +179,7 @@ class CrimeFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 mCrime.setTitle(editable.toString());
+                updateCrime();
             }
         });
         mReportBtn.setOnClickListener(new View.OnClickListener() {
@@ -255,6 +260,7 @@ class CrimeFragment extends Fragment {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
             updateDate();
+            updateCrime();
         }else if(requestCode == REQUEST_CONTACT){
             Uri contactUri = data.getData();
             String [] queryFields = new String []{ContactsContract.Contacts.DISPLAY_NAME};
@@ -268,6 +274,7 @@ class CrimeFragment extends Fragment {
                 String suspect = c.getString(0);
                 mCrime.setSuspect(suspect);
                 mSuspectBtn.setText(suspect);
+                updateCrime();
             } finally {
                 c.close();
             }
@@ -280,10 +287,31 @@ class CrimeFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if(context instanceof Callbacks){
+            mCallbacks = (Callbacks) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
+
+    public interface Callbacks{
+        void onCrimeUpdated(CrimeBean crimeBean);
+    }
     private void updateDate() {
         mDateBtn.setText(mCrime.getDate().toString());
     }
 
+    private void updateCrime(){
+        CrimeLab.getInstance(getActivity()).updateCrime(mCrime);
+        mCallbacks.onCrimeUpdated(mCrime);
+    }
     private String getCrimeReport(){
         String solvedString = null;
         if(mCrime.isSolved()){

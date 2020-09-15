@@ -5,11 +5,12 @@ import android.content.Intent;
 
 import androidx.fragment.app.Fragment;
 
+import com.soul.hodgepodge.bean.crime.CrimeBean;
 import com.soul.hodgepodge.fragment.crime.CrimeFragment;
 
 import java.util.UUID;
 
-public class CrimeActivity extends BaseFragmentActivity {
+public class CrimeActivity extends BaseFragmentActivity implements CrimeFragment.Callbacks {
 
     public static final String KEY_UUID = "com.soul.hodgepodge.ui.crime.KEY_UUID";
 
@@ -26,4 +27,8 @@ public class CrimeActivity extends BaseFragmentActivity {
     }
 
 
+    @Override
+    public void onCrimeUpdated(CrimeBean crimeBean) {
+
+    }
 }
