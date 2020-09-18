@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Hodgepodge</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <!--  CrimePageActivity  CrimeFragment-->
+    <string name="crime_title_hint">"crime简短描述"</string>
+    <string name="crime_title_label">"标题"</string>
+    <string name="crime_details_label">"详情"</string>
+    <string name="crime_solved_label">"是否解决"</string>
+    <string name="crime_delete">"删除"</string>
+
+    <string name="crime_suspect_text">选择怀疑对象</string>
+    <string name="crime_report_text">抗议或描述</string>
+    <!-- CrimeListFragment -->
+    <string name="new_crime">"新建"</string>
+    <string name="show_subtitle">"显示副标题"</string>
+    <string name="hide_subtitle">"隐藏副标题"</string>
+    <string name="subtitle_format">%1d crime</string>
+
+
+    <string name="crime_report">%1$s! 发现与 %2s. %3$s, 和 %4$s</string>
+    <string name="crime_report_solved">已处理</string>
+    <string name="crime_report_unsolved">未处理</string>
+    <string name="crime_report_no_suspect">没有嫌疑</string>
+    <string name="crime_report_suspect">这个嫌疑人是 %s.</string>
+    <string name="crime_report_subject">Crime处理情况报告</string>
+    <string name="send_report">投诉方式</string>
+</resources>
