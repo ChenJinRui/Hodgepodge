@@ -1,4 +1,4 @@
-package com.soul.hodgepodge.ui.crime;
+package com.soul.hodgepodge.ui.base;
 
 import androidx.annotation.LayoutRes;
 import androidx.appcompat.app.AppCompatActivity;

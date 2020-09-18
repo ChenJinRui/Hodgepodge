@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 
 import com.soul.hodgepodge.bean.crime.CrimeBean;
 import com.soul.hodgepodge.fragment.crime.CrimeFragment;
+import com.soul.hodgepodge.ui.base.BaseFragmentActivity;
 
 import java.util.UUID;
 
