@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<!--  <layout>：数据绑定工具会生成一个绑定类 新产生的类名默认以布局文件命名（按照JAVA的命名规则 FragmentBeatBoxBinding）  -->
+<!--  FragmentBeatBoxBinding binding = DataBindingUtils.inflate(xxxxx);  -->
+<!--  在app/build.gradle中配置 dataBinding{enable=true} -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/beat_box_recycler_view"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
+</layout>

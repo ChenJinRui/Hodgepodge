@@ -1,6 +1,7 @@
 package com.soul.hodgepodge.ui.beatbox;
 
 
+import com.soul.hodgepodge.fragment.beatbox.BeatBoxFragment;
 import com.soul.hodgepodge.ui.base.BaseFragmentActivity;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,6 @@ public class BeatBoxActivity extends BaseFragmentActivity {
     @Override
     protected Fragment createFragment() {
 
-        return null;
+        return BeatBoxFragment.newInstance();
     }
 }
