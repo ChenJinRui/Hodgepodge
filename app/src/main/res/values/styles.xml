@@ -14,5 +14,13 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="BeatBoxButton">
+        <item name="android:background">@color/dark_blue</item>
+    </style>
+    <!--BeatBoxButton.Strong 指 Strong继承BeatBoxButton的属性 -->
+<!--  也可以是使用  <style name="Strong" parent="BeatBoxButton"> 继承BeatBoxButton的属性-->
+    <style name="BeatBoxButton.Strong">
+        <item name="android:textStyle">bold</item>
+    </style>
 
 </resources>
