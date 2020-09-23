@@ -32,8 +32,10 @@ class BeatBoxFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBeatBox = new BeatBox(getActivity());
+        //保留Fragment 使其实持有例对象不被销毁（BeatBox）（旋转等操作时） 只销毁Fragment的视图
+        setRetainInstance(true);
 
+        mBeatBox = new BeatBox(getActivity());
     }
 
     @Nullable
@@ -46,6 +48,12 @@ class BeatBoxFragment extends Fragment {
         binding.beatBoxRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
         binding.beatBoxRecyclerView.setAdapter(new SoundAdapter(mBeatBox.getSounds()));
         return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mBeatBox.release();
     }
 
     public static BeatBoxFragment newInstance(){

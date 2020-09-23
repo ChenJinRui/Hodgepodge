@@ -34,6 +34,9 @@ dependencies {
     //真机调试查看数据库 s 谷歌浏览器打开chrome://inspect
     implementation 'com.facebook.stetho:stetho:1.5.1'
     //真机调试查看数据库 e
+    //测试
+    testImplementation "org.mockito:mockito-core:2.13.0"
+    testImplementation "org.hamcrest:hamcrest-junit:2.0.0.0"
 
 
 }

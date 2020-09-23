@@ -6,8 +6,10 @@ public
  *
  */
 class Sound {
+
     private String mAssetPath;
     private String mName;
+    private Integer mSoundId;//Integer在没有值时可以设置为null
 
     public Sound (String assetPath){
         mAssetPath = assetPath;
@@ -22,5 +24,13 @@ class Sound {
 
     public String getName() {
         return mName;
+    }
+
+    public Integer getSoundId() {
+        return mSoundId;
+    }
+
+    public void setSoundId(Integer soundId) {
+        mSoundId = soundId;
     }
 }
