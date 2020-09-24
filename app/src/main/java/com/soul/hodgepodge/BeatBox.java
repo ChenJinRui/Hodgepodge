@@ -34,8 +34,9 @@ class BeatBox {
         mSoundPool = new SoundPool(MAX_SOUNDS, AudioManager.STREAM_MUSIC,0);
         loadSounds();
     }
-
     private void loadSounds(){
+        // \u000d  LogUtils.i("真的吗？");
+        // \u000d  LogUtils.i("真的吗23333？");
         String [] soundNames ;
         try {
             soundNames = mAssetManager.list(SOUNDS_FOLDER);
