@@ -11,6 +11,16 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [
+                //个推应用参数，请填写您申请的 GETUI_APP_ID，GETUI_APP_KEY，GETUI_APP_SECRET 值
+                GETUI_APP_ID : "RAYMXuypdFARZedQHCalSA",
+                GETUI_APP_KEY : "W8hb2YJwbQ6K0zJNo3YJC9",
+                GETUI_APP_SECRET : "HM4LI7opzy5y6STsRZjAN4",
+        ]
+        ndk {
+            // 注意：这里需要添加项目所需 CPU 类型的最小集
+            abiFilters "armeabi", "armeabi-v7a", "x86_64", "x86"
+        }
     }
 
     buildTypes {
@@ -37,6 +47,9 @@ dependencies {
     //测试
     testImplementation "org.mockito:mockito-core:2.13.0"
     testImplementation "org.hamcrest:hamcrest-junit:2.0.0.0"
+
+    //个推
+    implementation 'com.getui:sdk:2.14.0.0'
 
 
 }

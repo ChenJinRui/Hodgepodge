@@ -1,6 +1,12 @@
 package com.soul.hodgepodge.fragment.beatbox;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.sax.TextElementListener;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +17,13 @@ import com.soul.hodgepodge.bean.beatbox.Sound;
 import com.soul.hodgepodge.databinding.FragmentBeatBoxBinding;
 import com.soul.hodgepodge.databinding.ListItemSoundBinding;
 import com.soul.hodgepodge.viewmodel.beatbox.SoundViewModel;
+import com.soul.hodgepodge.widget.ToastUtils;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -43,11 +51,40 @@ class BeatBoxFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         FragmentBeatBoxBinding binding = DataBindingUtil
-                .inflate(inflater, R.layout.fragment_beat_box,container,false);
+                .inflate(inflater, R.layout.fragment_beat_box, container, false);
         //binding.beatBoxRecyclerView = beat_box_recycler_view
-        binding.beatBoxRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
+        binding.beatBoxRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         binding.beatBoxRecyclerView.setAdapter(new SoundAdapter(mBeatBox.getSounds()));
+        getInfo();
         return binding.getRoot();
+    }
+
+    private void getInfo() {
+        TelephonyManager tm = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+        if(tm == null){
+           return;
+        }
+//        String deviceid = tm.getDeviceId();
+        if (ActivityCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        String tel = tm.getLine1Number();
+//        String  imei = tm.getSimSerialNumber();
+//        String imsi = tm.getSubscriberId();
+        Log.e("AAA","tel : " + tel);
+        ToastUtils.getInstance().show("TEl : " + tel);
     }
 
     @Override

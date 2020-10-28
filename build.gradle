@@ -24,6 +24,7 @@ allprojects {
 
         maven { url 'http://maven.aliyun.com/nexus/content/repositories/google' }
         maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
+        maven { url "http://mvn.gt.getui.com/nexus/content/repositories/releases/"}
     }
     tasks.withType(Javadoc) { // 新增
         options.addStringOption('Xdoclint:none', '-quiet')

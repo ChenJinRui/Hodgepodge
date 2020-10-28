@@ -6,6 +6,13 @@
 <!--  uses-feature 对外提供需要的特征eg: 需要相机  required 表示是否必须 -->
     <uses-feature android:name="android.hardware.Camera"
         android:required="false"/>
+
+    <!-- iBeancon 功能所需权限 -->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -64,7 +71,14 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-
+        <service
+            android:name=".service.MyPushService"
+            android:exported="true"
+            android:label="PushService"
+            android:process=":pushservice"/>
+        <service
+            android:name=".service.MyIntentService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.soul.hodgepodge.FileProvider"

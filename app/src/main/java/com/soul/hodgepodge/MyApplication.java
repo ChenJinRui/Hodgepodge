@@ -2,8 +2,11 @@ package com.soul.hodgepodge;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.facebook.stetho.Stetho;
+import com.igexin.sdk.IUserLoggerInterface;
+import com.igexin.sdk.PushManager;
 
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
@@ -31,6 +34,14 @@ public class MyApplication extends Application {
         Stetho.initializeWithDefaults(this);
         //真机调试查看数据库 e
         //this is test
+        //初始化个推
+        PushManager.getInstance().initialize(this);
+        PushManager.getInstance().setDebugLogger(this, new IUserLoggerInterface() {
+            @Override
+            public void log(String s) {
+                Log.e("PUSH_LOG",s);
+            }
+        });
     }
 
     /**
